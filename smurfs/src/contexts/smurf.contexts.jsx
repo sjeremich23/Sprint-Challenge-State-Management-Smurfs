@@ -7,14 +7,17 @@ export const SmurfsContext = createContext();
 export const SmurfsContextProvider = props => {
   const { children } = props;
   const [village, setVillage] = useState([]);
-  const [item, setItem] = useState();
   const [render, setRender] = useState(false);
+  const [item, setItem] = useState({
+    name: "",
+    age: "",
+    height: ""
+  });
 
   useEffect(() => {
     axios
       .get("http://localhost:3333/smurfs")
       .then(res => {
-        // console.log("response", res);
         setVillage(res.data);
       })
       .catch(err => {
@@ -22,20 +25,26 @@ export const SmurfsContextProvider = props => {
       });
   }, [render]);
 
-  const handleChange = e => {
-    setItem({ ...item, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = e => {
     e.preventDefault();
-    axios()
-      .put("http://localhost:3333/smurfs", item)
-      .then(res => {
-        console.log(res.data);
+    axios
+      .post(`http://localhost:3333/smurfs`, item)
+      .then(() => {
+        setRender(!render);
+        setItem({
+          name: "",
+          age: "",
+          height: ""
+        });
       })
       .catch(err => {
         console.log(err, err.response);
       });
+  };
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setItem({ ...item, [name]: value });
   };
 
   return (

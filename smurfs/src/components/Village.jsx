@@ -4,7 +4,6 @@ import { SmurfsContext } from "../contexts/smurf.contexts";
 
 const Village = () => {
   const { village } = useContext(SmurfsContext);
-  console.log("village", village);
 
   return (
     <div>
